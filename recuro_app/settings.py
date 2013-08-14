@@ -10,16 +10,16 @@ ADMINS = (
 MANAGERS = ADMINS
 
 RECURLY_API_KEY = "{{RECURLY_API_KEY}}"
-XERO_ACCOUNT_CODE = "{{XERO_ACCOUNT_CODE}}" 
+XERO_ACCOUNT_CODE = "{{XERO_ACCOUNT_CODE}}"
 XERO_CONSUMER_KEY = "{{XERO_CONSUMER_KEY}}"
 XERO_CONSUMER_SECRET = "{{XERO_CONSUMER_SECRET}}"
-XERO_RSA_KEY = """ 
+XERO_RSA_KEY = """
 {{XERO_RSA_KEY}}
 """
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
