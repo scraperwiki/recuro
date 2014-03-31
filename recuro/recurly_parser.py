@@ -1,11 +1,10 @@
-import string
-
 from django.conf import settings
-from lxml import etree,html
+from lxml import etree
 import recurly
 from jinja2 import Template
 
 from recuro.xero import XeroPrivateClient
+
 
 def parse(body):
     if '<new_account_notification>' in body:
@@ -17,10 +16,11 @@ def parse(body):
         invoice.get_tax_details()
         return invoice
 
+
 class Contact(XeroPrivateClient):
     def __init__(self, xml=None, **k):
         # Example XML in specs/recurly_parse_spec.py
-        doc = html.fromstring(xml)
+        doc = etree.fromstring(xml)
         self.number = doc.xpath('//account_code')[0].text
         self.name = doc.xpath('//company_name')[0].text
         self.first_name = doc.xpath('//first_name')[0].text
@@ -31,7 +31,7 @@ class Contact(XeroPrivateClient):
         self.address2 = None
         self.city = None
         self.state = None
-        self.country =  None
+        self.country = None
         self.zip = None
         self.vat_number = None
 
@@ -52,7 +52,7 @@ class Contact(XeroPrivateClient):
         self.vat_number = billing.vat_number
 
     def to_xml(self):
-        template = Template( """
+        template = Template("""
             <Contact>
                 <ContactNumber>{{number}}</ContactNumber>
                 <Name>{{name|e}}</Name>
@@ -84,10 +84,11 @@ class Contact(XeroPrivateClient):
                         city=self.city, state=self.state, country=self.country,
                         zip=self.zip).encode('utf-8')
 
+
 class Invoice(XeroPrivateClient):
     def __init__(self, xml=None, **k):
         # Example XML in specs/recurly_parse_spec.py
-        doc = html.fromstring(xml.encode('UTF-8'))
+        doc = etree.fromstring(xml)
         # Map recurly account code to xero contact number.
         self.contact_number = doc.xpath('//account_code')[0].text
         self.amount_in_cents = int(
@@ -145,5 +146,7 @@ class Invoice(XeroPrivateClient):
         if self.tax_in_cents == 0:
             tax_type = "NONE"
 
-        return template.render(price=price, short_date=short_date,
-          tax_type=tax_type, **self.__dict__).encode('utf-8')
+        return template.render(price=price,
+                               short_date=short_date,
+                               tax_type=tax_type,
+                               **self.__dict__).encode('utf-8')

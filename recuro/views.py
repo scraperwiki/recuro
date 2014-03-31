@@ -4,12 +4,13 @@ from django.http import (HttpResponse, HttpResponseForbidden,
 from django.views.decorators.csrf import csrf_exempt
 from recuro import recurly_parser
 
+
 @csrf_exempt
 def notify(request, apikey):
     if apikey != settings.RECURLY_API_KEY:
         return HttpResponseForbidden()
-    obj = recurly_parser.parse(request.raw_post_data)
-    if obj == None:
+    obj = recurly_parser.parse(request.body)
+    if obj is None:
         return HttpResponse("unsupported", mimetype="text/plain")
 
     resp, content = obj.save()
