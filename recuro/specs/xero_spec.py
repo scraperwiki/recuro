@@ -1,4 +1,5 @@
 from recuro import xero
+from nose.plugins.attrib import attr
 
 session = None
 
@@ -12,6 +13,7 @@ def it_can_import_xero():
 def it_can_authorise_with_xero():
     assert session
 
+@attr('integration')
 def it_can_call_a_xero_function():
     # Is allowed access to internal _request method; it's
     # irrelevant which method gets called.  Don't think that this
@@ -20,6 +22,7 @@ def it_can_call_a_xero_function():
     print repr(content)
     assert resp['status'] == '200'
 
+@attr('integration')
 def it_can_post_an_xml_contact():
     from recuro.recurly_parser import Contact
     from recurly_parse_spec import recurly_contact
@@ -28,6 +31,7 @@ def it_can_post_an_xml_contact():
     resp, content = contact.save()
     assert resp['status'] == '200'
 
+@attr('integration')
 def it_can_post_an_xml_contact_with_an_ampersand_in():
     from recuro.recurly_parser import Contact
     from recurly_parse_spec import recurly_contact
@@ -37,6 +41,7 @@ def it_can_post_an_xml_contact_with_an_ampersand_in():
     resp, content = contact.save()
     assert resp['status'] == '200'
 
+@attr('integration')
 def it_can_post_an_xml_invoice_with_tax():
     from recuro.recurly_parser import Invoice
     from recurly_parse_spec import recurly_successful_payment
@@ -45,6 +50,7 @@ def it_can_post_an_xml_invoice_with_tax():
     resp, content = invoice.save()
     assert resp['status'] == '200'
 
+@attr('integration')
 def it_can_post_an_xml_invoice_without_tax():
     from recuro.recurly_parser import Invoice
     from recurly_parse_spec import recurly_successful_payment
